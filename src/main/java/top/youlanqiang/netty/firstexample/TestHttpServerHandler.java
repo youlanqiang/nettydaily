@@ -8,6 +8,7 @@ import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 public class TestHttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
 
@@ -23,7 +24,7 @@ public class TestHttpServerHandler extends SimpleChannelInboundHandler<HttpObjec
             System.out.println("方法类型:" + request.method().name());
             URI uri = URI.create(request.uri());
             System.out.println("uri地址:" + uri.getPath());
-            ByteBuf content = Unpooled.copiedBuffer("Hello World", CharsetUtil.UTF_8);
+            ByteBuf content = Unpooled.copiedBuffer("Hello World", StandardCharsets.UTF_8);
             FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
                     HttpResponseStatus.OK, content);
             response.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN)
