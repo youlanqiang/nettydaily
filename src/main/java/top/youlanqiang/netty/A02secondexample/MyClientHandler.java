@@ -1,4 +1,4 @@
-package top.youlanqiang.netty.secondexample;
+package top.youlanqiang.netty.A02secondexample;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

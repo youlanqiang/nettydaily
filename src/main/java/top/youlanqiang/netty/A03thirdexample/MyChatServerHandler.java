@@ -1,4 +1,4 @@
-package top.youlanqiang.netty.thirdexample;
+package top.youlanqiang.netty.A03thirdexample;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

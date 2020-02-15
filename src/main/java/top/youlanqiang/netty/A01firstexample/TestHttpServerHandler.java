@@ -1,11 +1,10 @@
-package top.youlanqiang.netty.firstexample;
+package top.youlanqiang.netty.A01firstexample;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
-import io.netty.util.CharsetUtil;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;

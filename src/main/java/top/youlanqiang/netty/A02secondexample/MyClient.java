@@ -1,4 +1,4 @@
-package top.youlanqiang.netty.secondexample;
+package top.youlanqiang.netty.A02secondexample;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
