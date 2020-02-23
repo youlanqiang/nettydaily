@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package top.youlanqiang.protobuf;
+
+option optimize_for = SPEED;
+option java_package = "top.youlanqiang.netty.A06sixthexample";
+option java_outer_classname = "MyDataInfo";
+
+message Student{
+    required string name = 1;
+    optional int32 age = 2;
+    optional string address = 3;
+}
+
+
