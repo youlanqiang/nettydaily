@@ -16,7 +16,7 @@ public class MyClientInitializer extends ChannelInitializer<SocketChannel> {
 
         //protobuf 默认的4个解码器
         cp.addLast(new ProtobufVarint32FrameDecoder())
-                .addLast(new ProtobufDecoder(MyDataInfo.Student.getDefaultInstance()))
+                .addLast(new ProtobufDecoder(MyDataInfo.MyMessage.getDefaultInstance()))
                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                 .addLast(new ProtobufEncoder())
                 .addLast(new TestClientHandler());
