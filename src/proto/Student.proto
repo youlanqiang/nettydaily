@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package top.youlanqiang.proto;
+
+option java_package = "top.youlanqiang.proto";
+option java_outer_classname = "StudentProto";
+option java_multiple_files = true; //是否生成多个文件
+
+
