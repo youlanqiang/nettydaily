@@ -3,6 +3,7 @@ package top.youlanqiang.nio;
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.SelectionKey;
 
 public class NioTest3 {
 
@@ -14,5 +15,6 @@ public class NioTest3 {
         fileChannel.write(byteBuffer);
 
         fos.close();
+
     }
 }
