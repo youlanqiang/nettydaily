@@ -1,6 +1,6 @@
 .idea
-*.iml
-#Created by .ignore support plugin (hsz.mobi)
+
+# Created by .ignore support plugin (hsz.mobi)
 ### Eclipse template
 .metadata
 bin/
@@ -195,4 +195,3 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-target/generated-sources/
