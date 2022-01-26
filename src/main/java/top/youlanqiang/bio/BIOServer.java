@@ -13,31 +13,56 @@ import java.util.concurrent.Executors;
  */
 public class BIOServer {
 
+    ServerSocket serverSocket = null;
+    ExecutorService executorService = Executors.newCachedThreadPool();
+
+
     public static void main(String[] args) throws IOException {
 
+            BIOServer server = new BIOServer();
+            server.start();
+
+    }
+
+    public void start() throws IOException {
         //1. 创建一个线程池
         //2. 如果有客户端连接，就创建一个线程，与之通信
 
-        ExecutorService executorService = Executors.newCachedThreadPool();
-
-        ServerSocket serverSocket = new ServerSocket(66666);
+        serverSocket = new ServerSocket(65535);
         System.out.println("服务器启动.");
 
-        while(true){
+        while(!serverSocket.isClosed()){
             // 监听等待客户端连接
+
             final Socket socket = serverSocket.accept();
+
             System.out.println("连接到一个客户端");
 
             //就创建一个线程，与之通信
             executorService.execute(()->{
-                handler(socket);
+                handler(this, socket);
             });
         }
 
+
     }
 
+    public void close(){
+        System.out.println("服务器正在关闭.");
+        executorService.shutdown();
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("服务器已关闭");
+    }
+
+
+
+
     // 编写一个handler方法，和客户端通讯
-    public static void handler(Socket socket){
+    public static void handler(BIOServer server, Socket socket){
         try{
             byte[] bytes = new byte[1024];
             // 通过socket 获取输入流
@@ -50,7 +75,15 @@ public class BIOServer {
                 // 则线程会阻塞在read操作上
                 int read = inputStream.read(bytes);
                 if (read != -1){
-                    System.out.println(new String(bytes, 0, read)); //输出客户端发送的数据
+                    String content = new String(bytes, 0, read);
+                    if(content.trim().equals("close")){
+                        System.out.println("客户端发送关闭指令.");
+                        socket.close();
+                        server.close();
+                    }else{
+                        System.out.println("client:"+content); //输出客户端发送的数据
+                    }
+
                 } else {
                     break;
                 }
