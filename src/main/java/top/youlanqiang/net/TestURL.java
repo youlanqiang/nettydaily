@@ -19,6 +19,9 @@ public class TestURL {
       System.out.println(url.getRef());  // test
       System.out.println(url.getQuery()); // null
 
+      URL url1 = new URL("tts://localhost:220");
+      System.out.println(url1.getContent());
+
 
   }
 }

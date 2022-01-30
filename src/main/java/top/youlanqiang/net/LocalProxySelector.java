@@ -17,6 +17,7 @@ public class LocalProxySelector extends ProxySelector {
       //使用方法如下：
       ProxySelector proxySelector = new LocalProxySelector();
       ProxySelector.setDefault(proxySelector);
+
   }
 
     // 禁止代理集合
