@@ -34,7 +34,7 @@ public class NIOServer {
 
             // 等待一秒,如果没有事件发生，就继续
             if(selector.select(1_000) == 0){ // 没有事件发生
-                System.out.println("服务器等待了1秒,无连接");
+//                System.out.println("服务器等待了1秒,无连接");
                 continue;
             }
 
@@ -45,8 +45,14 @@ public class NIOServer {
             Set<SelectionKey> selectionKeys = selector.selectedKeys();
             // 迭代器遍历集合 迭代器可以安全,方便的remove元素
             Iterator<SelectionKey> iterator = selectionKeys.iterator();
+            
+
             while(iterator.hasNext()){
                 SelectionKey key = iterator.next();
+
+                // 手动从集合中移除当前的selectionKey,防止重复操作
+                iterator.remove();
+
                 if(key.isAcceptable()){ // 如果是 OP_ACCEPT; 表示有新的客户端连接
                     // 客户端生成一个SocketChannel
                     SocketChannel socketChannel = serverSocketChannel.accept();
@@ -63,11 +69,19 @@ public class NIOServer {
                     SocketChannel socketChannel = (SocketChannel) key.channel();
                     // 获取到该channel关联的buffer
                     ByteBuffer buffer =  (ByteBuffer) key.attachment();
-                    socketChannel.read(buffer);
-                    System.out.println("客户端发送:"+ new String(buffer.array()));
+                    int length = socketChannel.read(buffer);
+                    //在客户端断开连接后，出现了不断产生新OP_READ事件
+                    //原因就在于断开连接后，为了让你知道连接已断开，所以会产生OP_READ事件。
+                    //那么该怎么判断呢？
+                    //其实只要判断一下byteBuffer的大小就可以了，当byteBuffer的长度小于0时，说明连接断开了，那么把channel关闭就可以了。
+                    if(length < 0){
+                        System.out.println("客户端关闭.");
+                        socketChannel.close();
+                    }else{
+                        System.out.println("客户端发送:"+ new String(buffer.array()));
+                    }
                 }
-                // 手动从集合中移除当前的selectionKey,防止重复操作
-                iterator.remove();
+
             }
         }
 

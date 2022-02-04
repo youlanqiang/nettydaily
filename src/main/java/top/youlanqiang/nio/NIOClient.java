@@ -17,6 +17,7 @@ public class NIOClient {
 
         //连接服务器
         if(!socketChannel.connect(address)){
+            //客户端连接服务端 必须有 finishConnect 这步操作
             while(!socketChannel.finishConnect()){
                 System.out.println("正在连接中.");
             }
@@ -28,7 +29,7 @@ public class NIOClient {
 
         // 发送数据
         socketChannel.write(buffer);
-        System.in.read();
+        socketChannel.close();
 
     }
 }
