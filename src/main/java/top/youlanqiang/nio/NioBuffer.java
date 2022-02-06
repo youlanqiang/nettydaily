@@ -10,7 +10,7 @@ import java.security.SecureRandom;
  * 在nio中是面向块或缓冲区（Buffer）来编程的
  *
  */
-public class NioTest1 {
+public class NioBuffer {
 
     public static void main(String[] args) {
         IntBuffer buffer = IntBuffer.allocate(10);

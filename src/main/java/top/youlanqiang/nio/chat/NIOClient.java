@@ -1,47 +1,46 @@
-package top.youlanqiang.nio;
+package top.youlanqiang.nio.chat;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.*;
+import java.nio.channels.SelectableChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 
-public class NIOServer {
-
+public class NIOClient {
 
     // 缓冲区的大小
     private final static int BUFFER_SIZE = 1024;
-
     // 缓冲区
-    private ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
-
-    // Server监听的端口号
-    // private final static int PORT = 8888;
+    private final ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
 
     // 选择器
     private Selector selector = null;
 
-    // 初始化工作
-    public void init(int port) throws IOException {
-        System.out.println("============ Listening On Port : " + port + "============");
-        // 打开服务器套接字通道
-        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
-        // 设置为非阻塞状态
-        serverSocketChannel.configureBlocking(false);
+    private final static int PORT = 8888;
 
-        // 绑定端口号
-        serverSocketChannel.bind(new InetSocketAddress(port));
-        // 打开一个选择器
+    // 初始化工作
+    public void init(String address) throws IOException {
+
+        // 打开客户端套接字通道
+        SocketChannel socketChannel = SocketChannel.open();
+        // 设置为非阻塞状态
+        socketChannel.configureBlocking(false);
+        // 打开选择器
         selector = Selector.open();
-        // 服务器套接字注册到Selector中 并指定Selector监控连接事件
-        serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+        // 注册
+        socketChannel.register(selector, SelectionKey.OP_CONNECT);
+        // 发起连接
+        socketChannel.connect(new InetSocketAddress(address, PORT));
+
     }
 
-    public void listen() throws IOException {
+    public void connect() throws IOException {
         while (true) {
-            // 开启选择
-            int readyChannels = selector.select(); // 没有通道就绪 一直阻塞 返回已经就绪通道的数目(有可能为0)
+            int readyChannels = selector.select();
             if (readyChannels == 0) {
                 continue;
             }
@@ -61,20 +60,25 @@ public class NIOServer {
 
     // 处理SelectionKey
     private void handleKey(SelectionKey key) throws IOException {
-        // 是否有连接进来
-        if (key.isAcceptable()) {
-            ServerSocketChannel server = (ServerSocketChannel) key.channel();// 获取通道 转化为要处理的类型
-            SocketChannel socketChannel = server.accept();
-            // SocketChannel通道的可读事件注册到Selector中
-            registerChannel(selector, socketChannel, SelectionKey.OP_READ);
-            // 连接成功 向Client打个招呼
-            if (socketChannel.isConnected()) {
+        // 是否可连接
+        if (key.isConnectable()) {
+            SocketChannel socketChannel = (SocketChannel) key.channel();
+            // 完成连接
+            if(socketChannel.isConnectionPending()) {
+                socketChannel.finishConnect();
+                System.out.println("连接成功...");
+                // 发送数据给Server
+                String message_to_server = "Hello,Server...";
                 buffer.clear();
-                buffer.put("I am Server...".getBytes());
+                buffer.put(message_to_server.getBytes());
                 buffer.flip();
                 socketChannel.write(buffer);
-
+                System.out.println("Client发送的数据:" + message_to_server);
+                registerChannel(selector, socketChannel, SelectionKey.OP_READ);
+            }else {
+                System.exit(1); // 连接失败 退出
             }
+
 
         }
         // 通道的可读事件就绪
@@ -86,7 +90,7 @@ public class NIOServer {
             while ((len = socketChannel.read(buffer)) > 0) {
                 buffer.flip();
                 while (buffer.hasRemaining()) {
-                    System.out.println("Server读取的数据:" + new String(buffer.array(), 0, len));
+                    System.out.println("Client读取的数据:" + new String(buffer.array(), 0, len));
                 }
             }
             if (len < 0) {
@@ -101,11 +105,11 @@ public class NIOServer {
             SocketChannel socketChannel = (SocketChannel) key.channel();
             buffer.clear(); // 清空缓冲区
             // 准备发送的数据
-            String message_from_server = "Hello,Client... " + socketChannel.getLocalAddress();
+            String message_from_server = "Hello,Server... " + socketChannel.getLocalAddress();
             buffer.put(message_from_server.getBytes());
             buffer.flip();
             socketChannel.write(buffer);
-            System.out.println("Server发送的数据:" + message_from_server);
+            System.out.println("Client发送的数据:" + message_from_server);
             // SocketChannel通道的可写事件注册到Selector中
             registerChannel(selector, socketChannel, SelectionKey.OP_READ);
         }
@@ -124,11 +128,9 @@ public class NIOServer {
     }
 
     public static void main(String[] args) throws IOException {
-        NIOServer server = new NIOServer();
-        server.init(8888);
-        server.listen();
+        NIOClient client = new NIOClient();
+        client.init("localhost");
+        client.connect();
     }
-
-
 
 }
