@@ -1,6 +1,5 @@
 package top.youlanqiang.net;
 
-import sun.net.www.protocol.http.HttpURLConnection;
 
 import java.io.IOException;
 import java.net.*;
@@ -41,7 +40,8 @@ public class CustomUrlProtocol {
         @Override
         protected URLConnection openConnection(URL u) throws IOException {
             // ProxySelector.getDefault().select(u.toURI());
-            return new HttpURLConnection(u, Proxy.NO_PROXY);
+//            return new HttpURLConnection(u, Proxy.NO_PROXY);
+            return null;
         }
     }
 }
