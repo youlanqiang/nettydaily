@@ -24,7 +24,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.44.Final</version>
+            <version>4.1.74.Final</version>
         </dependency>
 
         <!-- 使用 protobuf 需要的jar包 -->
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.11.3</version>
+            <version>3.16.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java-util -->
@@ -42,25 +42,6 @@
             <version>3.11.3</version>
         </dependency>
 
-        <!-- grpc需要的java包 -->
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-netty</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-protobuf</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-stub</artifactId>
-            <version>1.4.0</version>
-        </dependency>
 
     </dependencies>
 
