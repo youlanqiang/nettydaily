@@ -73,7 +73,6 @@ public class NIOServer {
                 buffer.put("I am Server...".getBytes());
                 buffer.flip();
                 socketChannel.write(buffer);
-
             }
 
         }
@@ -101,7 +100,7 @@ public class NIOServer {
             SocketChannel socketChannel = (SocketChannel) key.channel();
             buffer.clear(); // 清空缓冲区
             // 准备发送的数据
-            String message_from_server = "Hello,Client... " + socketChannel.getLocalAddress();
+            String message_from_server = "Hello,Client..." + socketChannel.getLocalAddress();
             buffer.put(message_from_server.getBytes());
             buffer.flip();
             socketChannel.write(buffer);

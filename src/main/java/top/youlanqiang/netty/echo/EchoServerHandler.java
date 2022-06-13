@@ -1,4 +1,4 @@
-package top.youlanqiang.book.chapter02;
+package top.youlanqiang.netty.echo;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
