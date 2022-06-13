@@ -7,3 +7,6 @@ option java_outer_classname = "StudentProto";
 option java_multiple_files = true; //是否生成多个文件
 
 
+message Student{
+
+}
